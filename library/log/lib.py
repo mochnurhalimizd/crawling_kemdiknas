@@ -4,10 +4,6 @@ import traceback
 from datetime import datetime
 from logging.handlers import RotatingFileHandler
 
-INFO = 'INFO'
-ERROR = 'ERROR'
-WARNING = 'WARNING'
-
 
 class LoggerLib:
     default_path = os.path.join(
@@ -38,6 +34,7 @@ class LoggerLib:
         try:
             os.makedirs(path)
         except OSError:
+            traceback.print_exc()
             if not os.path.isdir(path):
                 raise
 
