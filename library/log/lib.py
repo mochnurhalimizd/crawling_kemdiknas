@@ -4,6 +4,8 @@ import traceback
 from datetime import datetime
 from logging.handlers import RotatingFileHandler
 
+from library.date.lib import DateClass
+
 
 class LoggerLib:
     default_path = os.path.join(
@@ -19,7 +21,7 @@ class LoggerLib:
         :param backup_count : (int) max backup files logger
         """
         self.check_directory(self.default_path)
-        # self.date = DateClass()
+        self.date = DateClass()
         log_file = self.set_name(name.replace('.log', ''))
         self.logger = logging.getLogger(log_file)
         self.set_level(logging.INFO)
@@ -39,9 +41,8 @@ class LoggerLib:
                 raise
 
     def set_name(self, log_name):
-        # self.date.get_date('full')
         return self.default_path + '/{}_{}.log'.format(
-            log_name.replace('.log', ''), ''
+            log_name.replace('.log', ''), self.date.get_date('full')
         )
 
     def set_level(self, type_level):
