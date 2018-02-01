@@ -6,6 +6,10 @@ from logging.handlers import RotatingFileHandler
 
 from library.date.lib import DateClass
 
+INFO = 'INFO'
+WARNING = 'WARNING'
+ERROR = 'ERROR'
+
 
 class LoggerLib:
     default_path = os.path.join(
@@ -27,6 +31,8 @@ class LoggerLib:
         self.set_level(logging.INFO)
         self.logger.addHandler(self.set_handler(log_file, max_bytes, backup_count))
 
+        self.write_log('Initial logger {}'.format(name.replace('.log', '')), method=INFO)
+
     @staticmethod
     def check_directory(path):
         """Check directory is exist, if directory is not exist service will make directory
@@ -34,7 +40,8 @@ class LoggerLib:
         :return null"""
 
         try:
-            os.makedirs(path)
+            if os.path.isdir(path) is False:
+                os.makedirs(path)
         except OSError:
             traceback.print_exc()
             if not os.path.isdir(path):
