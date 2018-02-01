@@ -8,10 +8,10 @@ class RequestLib:
     def get_method(self, url, parameter):
         try:
             request = requests.get(url, params=parameter)
-            self.logger.write_log('Sukses fetch data dari {}'.format(request.url))
+            self.logger.write_log(self.get_message('success', url, parameter), method='INFO')
             return self.get_response(request)
         except requests.exceptions.RequestException:
-            self.logger.write_log(self.get_message(url, parameter), method='ERROR')
+            self.logger.write_log(self.get_message('error', url, parameter), method='ERROR')
             return self.get_method(url, parameter)
 
     @staticmethod
@@ -26,6 +26,15 @@ class RequestLib:
     def url_encode(paramater):
         return '&'.join(["{}={}".format(k, v) for k, v in paramater.items()])
 
-    def get_message(self, url, parameter):
-        return 'Error fetch data dari {}'.format('{}?{}'.format(url, self.url_encode(parameter)))
+    def get_message(self, mode, url, parameter):
+        result = {
+            'error': lambda x: 'Error fetch data dari {}'.format('{}?{}'.format(
+                x.get('url'), self.url_encode(x.get('parameter')))
+            ),
+            'success': lambda x: 'Sukses fetch data dari {}'.format('{}?{}'.format(
+                x.get('url'), self.url_encode(x.get('parameter')))
+            ),
+        }
+
+        return result.get(mode, lambda x: str('Oops key is not found'))({'url': url, 'parameter': parameter})
 
