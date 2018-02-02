@@ -25,9 +25,8 @@ class ProvinsiModules:
         data = [merge_two_dict(self.get_request_parameter(), {'kode_wilayah': x.get('kode_wilayah')}) for x in provinsi]
 
         for parameter in data:
-            # thread = ThreadLib(1, 'hello', callback=self.request_api, param=parameter)
-            # thread.start()
-            self.request_api(parameter)
+            thread = ThreadLib(1, 'hello', callback=self.request_api, param=parameter)
+            thread.start()
 
     def request_api(self, parameter):
         tic(tag='fetch url')
