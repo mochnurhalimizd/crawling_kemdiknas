@@ -12,7 +12,7 @@ from library.general.lib import merge_two_dict, tic, toc
 from model.kabupaten import KabupatenModel
 
 
-class ProvinsiModules:
+class KabupatenModules:
     def __init__(self):
         self.logger = LoggerLib('kabupaten_modules')
         self.request = RequestLib(self.logger)
@@ -21,8 +21,8 @@ class ProvinsiModules:
         self.data = self.get_parameter(self.config)
 
     def run(self):
-        provinsi = self.model.get_data().get('data')
-        data = [merge_two_dict(self.get_request_parameter(), {'kode_wilayah': x.get('kode_wilayah')}) for x in provinsi]
+        kabupaten = self.model.get_data().get('data')
+        data = [merge_two_dict(self.get_request_parameter(), {'kode_wilayah': x.get('kode_wilayah')}) for x in kabupaten]
 
         for parameter in data:
             thread = ThreadLib(1, 'hello', callback=self.request_api, param=parameter)
@@ -61,5 +61,5 @@ class ProvinsiModules:
         return param
 
 if __name__ == '__main__':
-    a = ProvinsiModules()
+    a = KabupatenModules()
     a.run()
