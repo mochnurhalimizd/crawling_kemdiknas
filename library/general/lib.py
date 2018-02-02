@@ -54,3 +54,7 @@ def toc(tag=None, save=False, fmt=False):
             return d
     else:
         print('no tic() start time available. Check global var settings')
+
+
+def merge_two_dict(x, y):
+    return {**x, **y}
