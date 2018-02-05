@@ -53,7 +53,7 @@ class KabupatenModules:
                 'db': config.get('mongo', 'mongo_database_config'),
                 'host': config.get('mongo', 'mongo_url'),
                 'port': config.get('mongo', 'mongo_port')
-            }
+            } 
         }
 
     def get_request_parameter(self):
