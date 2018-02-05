@@ -5,6 +5,15 @@ class RequestLib:
     def __init__(self, logger):
         self.logger = logger
 
+    def get_html(self, url):
+        try:
+            request = requests.get(url)
+            self.logger.write_log(self.get_message('success', url, {}), method='INFO')
+            return request.text
+        except requests.exceptions.RequestException:
+            self.logger.write_log(self.get_message('error', url, {}), method='ERROR')
+            return self.get_html(url)
+
     def get_method(self, url, parameter):
         try:
             request = requests.get(url, params=parameter)
