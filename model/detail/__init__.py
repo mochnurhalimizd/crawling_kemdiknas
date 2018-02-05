@@ -17,8 +17,11 @@ class DetailModel:
         )
         self.logger = logger
 
-    def get_data(self):
-        return self.mongo.get(self.collection, limit=10)
+    def get_data(self, bs4=True):
+        if bs4:
+            return self.mongo.get(self.collection, where={'info_sekolah': None})
+        else:
+            return self.mongo.get(self.collection, where={'detail_sekolah': None})
 
     def search_data(self, pk, item):
         find = self.mongo.get(self.collection, where={'sekolah_id_enkrip': pk})
