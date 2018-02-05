@@ -3,6 +3,8 @@ from time import sleep
 
 import random
 
+threadLimiter = threading.BoundedSemaphore(10)
+
 
 class ThreadLib(threading.Thread):
     def __init__(self, threat, name, **kwargs):
@@ -12,8 +14,13 @@ class ThreadLib(threading.Thread):
         self.kwargs = kwargs
 
     def run(self):
-        if 'callback' in self.kwargs:
-            self.kwargs.get('callback')(self.kwargs.get('param'))
+        threadLimiter.acquire()
+
+        try:
+            if 'callback' in self.kwargs:
+                self.kwargs.get('callback')(self.kwargs.get('param'))
+        finally:
+            threadLimiter.release()
 
 
 def callback(data):
