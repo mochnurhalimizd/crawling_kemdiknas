@@ -6,27 +6,30 @@ sys.path.append(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.
 from library.mongo.lib import MongoLib
 
 
-class SekolahModel:
-    collection = 'smartcity_temp_school'
-
+class WorkspaceModel:
     def __init__(self, database, logger):
         self.mongo = MongoLib(
-            db=database.get('db'),
+            db=database.get('workspace'),
             host=database.get('host'),
             port=database.get('port')
         )
         self.logger = logger
+        self.collection = 'mapping_code'
 
-    def get_data(self):
-        return self.mongo.get('smartcity_temp_location', where={'id_level_wilayah': 3})
+    def get_data(self, mode, where={}):
+        result = {
+            'master': 'master_kotakab',
+            'workspace': 'workspace',
+            'mapping': 'mapping_code'
+        }
 
-    def get_school(self, where):
-        return self.mongo.get(self.collection, where=where)
+        find = self.mongo.get(result.get(mode), where=where)
+        return find
 
     def search_data(self, pk, item):
-        find = self.mongo.get(self.collection, where={'sekolah_id_enkrip': pk})
+        find = self.mongo.get(self.collection, where={'city_code': pk, 'type': 'kemdiknas'})
         if find.get('count') > 0:
-            self.update_data(item, {'sekolah_id_enkrip': pk})
+            self.update_data(item, {'city_code': pk, 'type': 'kemdiknas'})
         else:
             self.insert_data(item, pk)
 
@@ -40,7 +43,7 @@ class SekolahModel:
     def update_data(self, item, key):
         query = self.mongo.update(self.collection, item, key)
         if query.get('code') == 200:
-            self.logger.write_log(self.get_message('success', 'update', key.get('sekolah_id_enkrip')), method='INFO')
+            self.logger.write_log(self.get_message('success', 'update', key.get('city_code')), method='INFO')
         else:
             self.update_data(item, key)
 
@@ -52,4 +55,5 @@ class SekolahModel:
         }
 
         return result.get(mode, lambda x: str('Oops key is not found'))({'method': method, 'pk': pk})
+
 

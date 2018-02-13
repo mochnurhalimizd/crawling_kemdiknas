@@ -12,7 +12,7 @@ from library.general.lib import merge_two_dict, tic, toc
 from model.sekolah import SekolahModel
 
 
-class KecamatanModules:
+class SekolahModules:
     def __init__(self):
         self.logger = LoggerLib('sekolah_modules')
         self.request = RequestLib(self.logger)
@@ -64,5 +64,5 @@ class KecamatanModules:
         return param
 
 if __name__ == '__main__':
-    a = KecamatanModules()
+    a = SekolahModules()
     a.run()
